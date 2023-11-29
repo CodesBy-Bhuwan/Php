@@ -1,9 +1,24 @@
 <?php 
+$showAlert = false;
+$showError = false;
 if($_SERVER["REQUEST_METHOD"] == "POST"){
+  
   include 'partial/_dbconnect.php';
   $username = $_POST['username'];
   $password = $_POST['password'];
   $cpassword = $_POST['cpassword'];
+  $exists = false;
+  if(($password == $cpassword) && $exists == false) {
+    // sql code here!
+    $sql = "INSERT INTO `users` (`serial number`, `username`, `password`, `date`) VALUES ( '$username', '$password', current_timestamp());";
+    $result = mysqli_query($conn, $sql);
+    if($result){
+      $showAlert = true;
+    }
+    else{
+      $showError = "Password doesn't match";
+  }
+}
   
 }
 
@@ -18,18 +33,32 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 </head>
 <body>
       <?php require 'partial/_nav.php'; ?>
-      <div role="alert"> <strong>Success </strong></div>
+
+      <?php
+      if($showAlert){
+        echo '
+        <div role="alert">
+        Success </div>';
+      }
+
+      if($showError){
+        echo '
+        <div role="alert">
+        Success  </div>';
+      }
+      ?>
+  
       <li></li>
-      <form action="" method="post">
+      <form action="/LoginSys/signup.php" method="post">
     <h1>Sign Up</h1>
     <h6>Username</h6>
     <input type="text" id="username">
     <li></li>
     <h6>Password</h6>
-    <input type="any" name="Password" id="password">
+    <input type="any" name="password" id="password">
     <li></li>
     <h6>Confrom Password</h6>
-    <input type="any" name="cpassword" id="Password">
+    <input type="any" name="cpassword" id="password">
     <p>Make sure to type the correct password</p>
     <button >Submit</button>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
