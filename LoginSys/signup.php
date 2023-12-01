@@ -8,18 +8,28 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
   $password = $_POST['password'];
   $cpassword = $_POST['cpassword'];
   $exists = false;
-  if(($password == $cpassword) && $exists == false) {
+   // Check if the user already exists
+   $check_user_sql = "SELECT * FROM `users` WHERE `username` = '$username'";
+  //  $check_user_result = mysqli_query($conn, $check_user_sql);
+
+   if (mysqli_num_rows($check_user_result) > 0) {
+       $exists = true;
+       $showError = "Username already exists";
+   } 
+  elseif(($password == $cpassword) && $exists == false) {
     // sql code here!
     $sql = "INSERT INTO `users` (`serial number`, `username`, `password`, `date`) VALUES ( '$username', '$password', current_timestamp());";
     $result = mysqli_query($conn, $sql);
     if($result){
       $showAlert = true;
+      // die("Error)
     }
     else{
-      $showError = "Password doesn't match";
+      // $showError = "Password doesn't match";
+      // $showError = "Error" . mysqli_error($conn);
+      die("Error: " . mysqli_error($conn));
   }
 }
-  
 }
 
 ?>
@@ -44,7 +54,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
       if($showError){
         echo '
         <div role="alert">
-        Success  </div>';
+        Try Again </div>';
       }
       ?>
   
@@ -52,13 +62,13 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
       <form action="/LoginSys/signup.php" method="post">
     <h1>Sign Up</h1>
     <h6>Username</h6>
-    <input type="text" id="username">
+    <input type="text" name="username" id="username">
     <li></li>
     <h6>Password</h6>
-    <input type="any" name="password" id="password">
+    <input type="text" name="password" id="password">
     <li></li>
     <h6>Confrom Password</h6>
-    <input type="any" name="cpassword" id="password">
+    <input type="text" name="cpassword" id="cpassword">
     <p>Make sure to type the correct password</p>
     <button >Submit</button>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
