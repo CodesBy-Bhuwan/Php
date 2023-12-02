@@ -1,24 +1,28 @@
-<?php 
+ <?php 
 $showAlert = false;
 $showError = false;
 if($_SERVER["REQUEST_METHOD"] == "POST"){
   
   include 'partial/_dbconnect.php';
+  // $snum = $_POST['serial number'];
   $username = $_POST['username'];
   $password = $_POST['password'];
   $cpassword = $_POST['cpassword'];
   $exists = false;
-   // Check if the user already exists
+  //  Check if the user already exists
    $check_user_sql = "SELECT * FROM `users` WHERE `username` = '$username'";
   //  $check_user_result = mysqli_query($conn, $check_user_sql);
 
-   if (mysqli_num_rows($check_user_result) > 0) {
-       $exists = true;
-       $showError = "Username already exists";
-   } 
-  elseif(($password == $cpassword) && $exists == false) {
+  //  if (mysqli_num_rows($check_user_result) > 0) {
+  //      $exists = true;
+  //      $showError = "Username already exists";
+  //  } 
+  // else
+  if(($password == $cpassword) && $exists == false) {
     // sql code here!
-    $sql = "INSERT INTO `users` (`serial number`, `username`, `password`, `date`) VALUES ( '$username', '$password', current_timestamp());";
+    $sql = "INSERT INTO `users` (`serial number`, `username`, `password`, `date`) VALUES (NULL, '$username', '$password', current_timestamp())";
+    // INSERT INTO `users` (`serial number`, `username`, `password`, `date`) VALUES (NULL, 'sql', 'sdf', current_timestamp());
+    // Check whether the primary key is set auto else we have to ensure through manually enrolling
     $result = mysqli_query($conn, $sql);
     if($result){
       $showAlert = true;
@@ -31,7 +35,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
   }
 }
 }
-
 ?>
 <!doctype html>
 <html lang="en">
@@ -59,16 +62,16 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
       ?>
   
       <li></li>
-      <form action="/LoginSys/signup.php" method="post">
+    <form action="" method="post">
     <h1>Sign Up</h1>
-    <h6>Username</h6>
+    <label for="username">Username</label> <br>
     <input type="text" name="username" id="username">
     <li></li>
-    <h6>Password</h6>
-    <input type="text" name="password" id="password">
+    <label for="password">Password</label><br>
+    <input type="password" name="password" id="password">
     <li></li>
-    <h6>Confrom Password</h6>
-    <input type="text" name="cpassword" id="cpassword">
+    <label for="cpassword">Confirm Password</label> <br>
+    <input type="password" name="cpassword" id="cpassword">
     <p>Make sure to type the correct password</p>
     <button >Submit</button>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
