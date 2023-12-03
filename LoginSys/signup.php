@@ -8,9 +8,18 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
   $username = $_POST['username'];
   $password = $_POST['password'];
   $cpassword = $_POST['cpassword'];
-  $exists = false;
+  // $exists = false;
+
   //  Check if the user already exists
-   $check_user_sql = "SELECT * FROM `users` WHERE `username` = '$username'";
+  $existSql = "SELECT * FROM `users` WHERE username = '$username'";
+  $result = mysqli_query($conn, $existSql);
+  $numExistRows = mysqli_num_rows($result);
+  if($numExistRows > 0){
+    $showError = "Username already exits";
+  }
+  else{
+
+
   //  $check_user_result = mysqli_query($conn, $check_user_sql);
 
   //  if (mysqli_num_rows($check_user_result) > 0) {
@@ -18,7 +27,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
   //      $showError = "Username already exists";
   //  } 
   // else
-  if(($password == $cpassword) && $exists == false) {
+  if(($password == $cpassword)) {
     // sql code here!
     $sql = "INSERT INTO `users` (`serial number`, `username`, `password`, `date`) VALUES (NULL, '$username', '$password', current_timestamp())";
     // INSERT INTO `users` (`serial number`, `username`, `password`, `date`) VALUES (NULL, 'sql', 'sdf', current_timestamp());
@@ -31,8 +40,10 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     else{
       // $showError = "Password doesn't match";
       // $showError = "Error" . mysqli_error($conn);
-      die("Error: " . mysqli_error($conn));
+      // die("Error: " . mysqli_error($conn));
+      $showError = "Password don't match";
   }
+}
 }
 }
 ?>
@@ -73,7 +84,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     <label for="cpassword">Confirm Password</label> <br>
     <input type="password" name="cpassword" id="cpassword">
     <p>Make sure to type the correct password</p>
-    <button >Submit</button>
+    <button>Submit</button>
+    <!-- <button >Submit</button> -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
     </form>
   </body>
